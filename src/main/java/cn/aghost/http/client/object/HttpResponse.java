@@ -40,14 +40,17 @@ public class HttpResponse {
     this.body = rsp.body().bytes();
     this.successful = rsp.isSuccessful();
     this.redirect = rsp.isRedirect();
-    this.headers.forEach(
-        node -> {
-          if (StringUtils.isNotBlank(node.getFirst())
-              && StringUtils.isNotBlank(node.getSecond())
-              && "content-type".equals(node.getFirst().toLowerCase().trim())) {
-            this.contentType = node.getSecond().trim().toLowerCase();
-          }
-        });
+    this.headers
+        .names()
+        .forEach(
+            name -> {
+              if (StringUtils.isNotBlank(name)
+                  && StringUtils.isNotBlank(name)
+                  && "content-type".equals(name.toLowerCase().trim())) {
+                String value = this.headers.get(name);
+                this.contentType = value.trim().toLowerCase();
+              }
+            });
     if (StringUtils.isNotBlank(this.contentType) && StringUtils.contains(this.contentType, "; ")) {
       String[] arr = this.contentType.split("; ");
       if (arr.length == 2) {

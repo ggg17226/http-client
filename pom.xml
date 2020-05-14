@@ -6,7 +6,7 @@
 
     <groupId>cn.aghost</groupId>
     <artifactId>http-client</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>http-client</name>
     <description>基于okhttp3封装的http工具包</description>
     <packaging>jar</packaging>
@@ -38,7 +38,7 @@
         <commons-lang3.version>3.10</commons-lang3.version>
         <commons-codec.version>1.14</commons-codec.version>
         <guava.version>29.0-jre</guava.version>
-        <okhttp3.version>4.6.0</okhttp3.version>
+        <okhttp3.version>3.8.1</okhttp3.version>
         <lombok.version>1.18.12</lombok.version>
         <slf4j.version>1.7.30</slf4j.version>
         <junit.version>5.6.2</junit.version>

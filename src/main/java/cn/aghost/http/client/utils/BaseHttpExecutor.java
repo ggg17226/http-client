@@ -48,7 +48,7 @@ public class BaseHttpExecutor {
     }
     OkHttpClient client = HttpClientUtil.getClient(clientConfig);
     Request.Builder builder =
-        buildBaseReq().url(url).method(method, RequestBody.create(body, contentType));
+        buildBaseReq().url(url).method(method, RequestBody.create(contentType, body));
     if (headers != null && headers.size() > 0) {
       builder.headers(headers);
     }
@@ -85,7 +85,7 @@ public class BaseHttpExecutor {
     }
     OkHttpClient client = HttpClientUtil.getClient(clientConfig);
     Request.Builder builder =
-        buildBaseReq().url(url).method(method, RequestBody.create(body, contentType));
+        buildBaseReq().url(url).method(method, RequestBody.create(contentType, body));
     if (headers != null && headers.size() > 0) {
       builder.headers(headers);
     }
@@ -105,13 +105,13 @@ public class BaseHttpExecutor {
    * @param callback 异步callback
    */
   public static void executeWithBodyAsync(
-          @NotNull String method,
-          @NotNull String url,
-          @Nullable Headers headers,
-          @Nullable byte[] body,
-          @Nullable MediaType contentType,
-          @Nullable ClientConfig clientConfig,
-          @NotNull Callback callback) {
+      @NotNull String method,
+      @NotNull String url,
+      @Nullable Headers headers,
+      @Nullable byte[] body,
+      @Nullable MediaType contentType,
+      @Nullable ClientConfig clientConfig,
+      @NotNull Callback callback) {
     if (contentType == null) {
       contentType = MediaType.parse("text/plan; charset=utf-8");
     }
@@ -120,15 +120,13 @@ public class BaseHttpExecutor {
     }
     OkHttpClient client = HttpClientUtil.getClient(clientConfig);
     Request.Builder builder =
-            buildBaseReq().url(url).method(method, RequestBody.create(body, contentType));
+        buildBaseReq().url(url).method(method, RequestBody.create(contentType, body));
     if (headers != null && headers.size() > 0) {
       builder.headers(headers);
     }
     Request req = builder.build();
     executeAsync(callback, client, req);
   }
-
-
 
   /**
    * 执行异步请求
