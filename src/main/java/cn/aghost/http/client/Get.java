@@ -4,8 +4,8 @@ import cn.aghost.http.client.object.ClientConfig;
 import cn.aghost.http.client.object.HttpCallback;
 import cn.aghost.http.client.object.HttpResponse;
 import cn.aghost.http.client.utils.BaseHttpExecutor;
-import cn.aghost.http.client.utils.HttpClientUtil;
-import okhttp3.*;
+import okhttp3.Callback;
+import okhttp3.Headers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,17 +49,7 @@ public class Get {
   public static HttpResponse doGet(
       @NotNull String url, @Nullable Headers headers, @Nullable ClientConfig clientConfig)
       throws IOException {
-
-    OkHttpClient client = HttpClientUtil.getClient(clientConfig);
-    Request.Builder builder = BaseHttpExecutor.buildBaseReq().url(url).get();
-    if (headers != null && headers.size() > 0) {
-      builder.headers(headers);
-    }
-    Request req = builder.build();
-
-    try (Response rsp = client.newCall(req).execute()) {
-      return new HttpResponse(rsp);
-    }
+    return BaseHttpExecutor.executeGet(url, headers, clientConfig);
   }
 
   /**
@@ -95,13 +85,7 @@ public class Get {
       @Nullable Headers headers,
       @Nullable ClientConfig clientConfig,
       @NotNull HttpCallback httpCallback) {
-    OkHttpClient client = HttpClientUtil.getClient(clientConfig);
-    Request.Builder builder = BaseHttpExecutor.buildBaseReq().url(url).get();
-    if (headers != null && headers.size() > 0) {
-      builder.headers(headers);
-    }
-    Request req = builder.build();
-    BaseHttpExecutor.executeAsync(httpCallback, client, req);
+    BaseHttpExecutor.executeGetAsync(url, headers, clientConfig, httpCallback);
   }
 
   /**
@@ -117,12 +101,6 @@ public class Get {
       @Nullable Headers headers,
       @Nullable ClientConfig clientConfig,
       @NotNull Callback callback) {
-    OkHttpClient client = HttpClientUtil.getClient(clientConfig);
-    Request.Builder builder = BaseHttpExecutor.buildBaseReq().url(url).get();
-    if (headers != null && headers.size() > 0) {
-      builder.headers(headers);
-    }
-    Request req = builder.build();
-    BaseHttpExecutor.executeAsync(callback, client, req);
+    BaseHttpExecutor.executeGetAsync(url, headers, clientConfig, callback);
   }
 }
