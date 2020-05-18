@@ -2,13 +2,14 @@ package cn.aghost.http.client.utils;
 
 import okhttp3.HttpUrl;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HttpDataUtils {
-
+  @Nullable
   public static Map<String, List<String>> decodeQueryString(String url) {
     if (StringUtils.isBlank(url)) {
       return null;
@@ -37,6 +38,9 @@ public class HttpDataUtils {
                 }
               });
     } catch (Exception e) {
+      return null;
+    }
+    if (paramMap.size() == 0) {
       return null;
     }
     return paramMap;
