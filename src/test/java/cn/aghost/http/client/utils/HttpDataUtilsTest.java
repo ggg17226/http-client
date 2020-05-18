@@ -17,7 +17,7 @@ class HttpDataUtilsTest {
     log.info(JSON.toJSONString(stringStringMap));
     assert stringStringMap.size() == 2;
     assert stringStringMap.containsKey("id")
-        && stringStringMap.get("id").size() == 2
+        && stringStringMap.get("id").size() == 3
         && stringStringMap.get("id").contains("1")
         && stringStringMap.get("id").contains("2");
     assert stringStringMap.containsKey("data")

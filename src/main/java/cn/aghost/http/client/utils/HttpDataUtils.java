@@ -3,7 +3,6 @@ package cn.aghost.http.client.utils;
 import okhttp3.HttpUrl;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,14 +24,14 @@ public class HttpDataUtils {
                 try {
                   if (StringUtils.isNotBlank(name)) {
                     List<String> valList = httpUrl.queryParameterValues(name);
-                    List<String> noBlankValList = new ArrayList<>();
-                    valList.forEach(
-                        val -> {
-                          if (StringUtils.isNotBlank(val)) {
-                            noBlankValList.add(val);
-                          }
-                        });
-                    paramMap.put(name, noBlankValList);
+                    //                    List<String> noBlankValList = new ArrayList<>();
+                    //                    valList.forEach(
+                    //                        val -> {
+                    //                          if (StringUtils.isNotBlank(val)) {
+                    //                            noBlankValList.add(val);
+                    //                          }
+                    //                        });
+                    paramMap.put(name, valList);
                   }
                 } catch (Exception e) {
                 }

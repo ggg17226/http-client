@@ -21,6 +21,15 @@ public class BaseHttpExecutor {
 
   private static volatile boolean logFlag = false;
   private static volatile LogLevelEnum logLevel = LogLevelEnum.info;
+  private static volatile boolean autoDecodeBody = false;
+
+  public static boolean isAutoDecodeBody() {
+    return autoDecodeBody;
+  }
+
+  public static synchronized void setAutoDecodeBody(boolean autoDecodeBody) {
+    BaseHttpExecutor.autoDecodeBody = autoDecodeBody;
+  }
 
   public static LogLevelEnum getLogLevel() {
     return logLevel;
