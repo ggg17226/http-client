@@ -2,8 +2,8 @@ package cn.aghost.http.client;
 
 import cn.aghost.http.client.object.HttpCallback;
 import cn.aghost.http.client.object.HttpResponse;
+import cn.aghost.http.client.object.Mimes;
 import cn.aghost.http.client.utils.BaseHttpExecutor;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -20,8 +20,8 @@ class HttpClient1Test {
   @Test
   void doGet() throws IOException, InterruptedException {
     BaseHttpExecutor.setLogFlag(true);
+    BaseHttpExecutor.setAutoDecodeBody(true);
     HttpResponse httpResponse = Get.doGet("https://file.aghost.cn/mmmmyipaddr.php");
-//    log.info(JSON.toJSONString(httpResponse));
     assert httpResponse.getContentType().equals("application/json");
     Get.doGetAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
@@ -34,7 +34,6 @@ class HttpClient1Test {
 
           @Override
           public void onSuccess(@NotNull Call call, @NotNull HttpResponse response) {
-//            log.info(JSON.toJSONString(response));
             assert httpResponse.getContentType().equals("application/json");
           }
         });
@@ -44,12 +43,13 @@ class HttpClient1Test {
   @org.junit.jupiter.api.Test
   void doPost() throws IOException, InterruptedException {
     BaseHttpExecutor.setLogFlag(true);
-    HttpResponse httpResponse = Post.doPost("https://file.aghost.cn/mmmmyipaddr.php", null, null);
+    HttpResponse httpResponse =
+        Post.doPost("https://file.aghost.cn/mmmmyipaddr.php", "{}".getBytes(), Mimes.JSON_UTF8);
     assert httpResponse.getContentType().equals("application/json");
     Post.doPostAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
-        null,
-        null,
+        "{}".getBytes(),
+        Mimes.JSON_UTF8,
         new HttpCallback() {
           @Override
           public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -59,23 +59,22 @@ class HttpClient1Test {
 
           @Override
           public void onSuccess(@NotNull Call call, @NotNull HttpResponse response) {
-//            log.info(JSON.toJSONString(response));
             assert httpResponse.getContentType().equals("application/json");
           }
         });
-//    log.info(JSON.toJSONString(httpResponse));
     sleep(1000);
   }
 
   @org.junit.jupiter.api.Test
   void doPut() throws IOException, InterruptedException {
     BaseHttpExecutor.setLogFlag(true);
-    HttpResponse httpResponse = Put.doPut("https://file.aghost.cn/mmmmyipaddr.php", null, null);
+    HttpResponse httpResponse =
+        Put.doPut("https://file.aghost.cn/mmmmyipaddr.php", "{}".getBytes(), Mimes.JSON_UTF8);
     assert httpResponse.getContentType().equals("application/json");
     Put.doPutAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
-        null,
-        null,
+        "{}".getBytes(),
+        Mimes.JSON_UTF8,
         new HttpCallback() {
           @Override
           public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -85,11 +84,9 @@ class HttpClient1Test {
 
           @Override
           public void onSuccess(@NotNull Call call, @NotNull HttpResponse response) {
-//            log.info(JSON.toJSONString(response));
             assert httpResponse.getContentType().equals("application/json");
           }
         });
-//    log.info(JSON.toJSONString(httpResponse));
     sleep(1000);
   }
 
@@ -97,12 +94,12 @@ class HttpClient1Test {
   void doDelete() throws IOException, InterruptedException {
     BaseHttpExecutor.setLogFlag(true);
     HttpResponse httpResponse =
-        Delete.doDelete("https://file.aghost.cn/mmmmyipaddr.php", null, null);
+        Delete.doDelete("https://file.aghost.cn/mmmmyipaddr.php", "{}".getBytes(), Mimes.JSON_UTF8);
     assert httpResponse.getContentType().equals("application/json");
     Delete.doDeleteAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
-        null,
-        null,
+        "{}".getBytes(),
+        Mimes.JSON_UTF8,
         new HttpCallback() {
           @Override
           public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -112,11 +109,9 @@ class HttpClient1Test {
 
           @Override
           public void onSuccess(@NotNull Call call, @NotNull HttpResponse response) {
-//            log.info(JSON.toJSONString(response));
             assert httpResponse.getContentType().equals("application/json");
           }
         });
-//    log.info(JSON.toJSONString(httpResponse));
     sleep(1000);
   }
 }

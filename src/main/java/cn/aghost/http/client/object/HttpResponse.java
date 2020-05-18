@@ -1,5 +1,6 @@
 package cn.aghost.http.client.object;
 
+import cn.aghost.http.client.utils.BaseHttpExecutor;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /** http resp 对象 */
 @Data
@@ -32,6 +34,25 @@ public class HttpResponse {
   @Nullable private String contentType;
   /** 返回body 编码 */
   @Nullable private String charset;
+  /** 自动转换的字符串型的返回体 */
+  @Nullable private String bodyString;
+
+  public String autoDecodeBody() {
+    try {
+      if (StringUtils.isNotBlank(this.bodyString)) {
+        return this.bodyString;
+      } else {
+        if (StringUtils.isNotBlank(this.charset)) {
+          Charset charset = Charset.forName(this.charset);
+          return new String(body, charset);
+        } else {
+          return new String(body);
+        }
+      }
+    } catch (Exception e) {
+      return null;
+    }
+  }
 
   public HttpResponse(Response rsp) throws IOException {
     this.protocol = rsp.protocol();
@@ -56,6 +77,9 @@ public class HttpResponse {
       if (arr.length == 2) {
         this.contentType = arr[0].trim();
         this.charset = arr[1].replaceAll("charset=", "").trim();
+        if (BaseHttpExecutor.isAutoDecodeBody()) {
+          this.bodyString = this.autoDecodeBody();
+        }
       }
     }
   }
