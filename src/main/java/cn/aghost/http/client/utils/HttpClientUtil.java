@@ -3,10 +3,12 @@ package cn.aghost.http.client.utils;
 import cn.aghost.http.client.exceptions.DuplicateHttpClientNameException;
 import cn.aghost.http.client.exceptions.HttpClientNotFoundException;
 import cn.aghost.http.client.object.ClientConfig;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,7 +67,10 @@ public class HttpClientUtil {
     sb.append(clientConfig.getWriteTimeout());
     sb.append("-");
     sb.append(clientConfig.isForceHttp1());
-    return sb.toString();
+    sb.append("-");
+    sb.append(JSON.toJSONString(clientConfig.getProxy()));
+
+    return DigestUtils.md5Hex(sb.toString());
   }
 
   /**

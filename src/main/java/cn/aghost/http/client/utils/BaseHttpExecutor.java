@@ -123,6 +123,7 @@ public class BaseHttpExecutor {
       jsonObject.put("method", "GET");
       jsonObject.put("reqId", reqId);
       jsonObject.put("url", url);
+      jsonObject.put("query", HttpDataUtils.decodeQueryString(url));
       jsonObject.put("headers", headers);
       jsonObject.put("clientInfo", clientConfig);
       jsonObject.put("state", "preExec");
@@ -191,6 +192,7 @@ public class BaseHttpExecutor {
       jsonObject.put("reqId", reqId);
       jsonObject.put("method", method);
       jsonObject.put("url", url);
+      jsonObject.put("query", HttpDataUtils.decodeQueryString(url));
       jsonObject.put("headers", headers);
       jsonObject.put("clientInfo", clientConfig);
       jsonObject.put("body", body);
@@ -249,6 +251,7 @@ public class BaseHttpExecutor {
       jsonObject.put("reqId", reqId);
       jsonObject.put("method", "GET");
       jsonObject.put("url", url);
+      jsonObject.put("query", HttpDataUtils.decodeQueryString(url));
       jsonObject.put("headers", headers);
       jsonObject.put("clientInfo", clientConfig);
       jsonObject.put("state", "preExec");
@@ -297,6 +300,7 @@ public class BaseHttpExecutor {
       jsonObject.put("reqId", reqId);
       jsonObject.put("method", method);
       jsonObject.put("url", url);
+      jsonObject.put("query", HttpDataUtils.decodeQueryString(url));
       jsonObject.put("headers", headers);
       jsonObject.put("clientInfo", clientConfig);
       jsonObject.put("body", body);
@@ -335,6 +339,7 @@ public class BaseHttpExecutor {
       jsonObject.put("reqId", reqId);
       jsonObject.put("method", "GET");
       jsonObject.put("url", url);
+      jsonObject.put("query", HttpDataUtils.decodeQueryString(url));
       jsonObject.put("headers", headers);
       jsonObject.put("clientInfo", clientConfig);
       jsonObject.put("state", "preExec");
