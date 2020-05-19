@@ -1,6 +1,9 @@
 package cn.aghost.http.client.utils;
 
+import cn.aghost.http.client.object.ClientConfig;
+import cn.aghost.http.client.object.HttpResponse;
 import cn.aghost.http.client.object.SchemesEnum;
+import com.alibaba.fastjson.JSON;
 import okhttp3.HttpUrl;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +58,13 @@ public class HttpDataUtils {
     if (paramMap.size() == 0) {
       return null;
     }
+
     return paramMap;
   }
+
+//  public static <T> T parseBody(HttpResponse resp, Class<T> clazz){
+//
+//  }
+
+
 }
