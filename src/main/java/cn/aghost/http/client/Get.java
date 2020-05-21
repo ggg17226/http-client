@@ -4,14 +4,72 @@ import cn.aghost.http.client.object.ClientConfig;
 import cn.aghost.http.client.object.HttpCallback;
 import cn.aghost.http.client.object.HttpResponse;
 import cn.aghost.http.client.utils.BaseHttpExecutor;
+import cn.aghost.http.client.utils.PojoUtils;
 import okhttp3.Callback;
 import okhttp3.Headers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class Get {
+  /**
+   * 执行http get请求
+   *
+   * @param url 请求地址
+   * @param clazz 返回值类型
+   * @param <T> 泛型
+   * @return 返回值
+   * @throws IOException
+   * @throws InvocationTargetException
+   * @throws IllegalAccessException
+   */
+  public static <T> T doGet(@NotNull String url, Class<T> clazz)
+      throws IOException, InvocationTargetException, IllegalAccessException {
+    HttpResponse httpResponse = doGet(url, null, (ClientConfig) null);
+    return PojoUtils.doDecode(clazz, httpResponse);
+  }
+  /**
+   * 执行http get请求
+   *
+   * @param url 请求地址
+   * @param headers 请求头
+   * @param clazz 返回值类型
+   * @param <T> 泛型
+   * @return 返回值
+   * @throws IOException
+   * @throws InvocationTargetException
+   * @throws IllegalAccessException
+   */
+  public static <T> T doGet(@NotNull String url, @Nullable Headers headers, Class<T> clazz)
+      throws IOException, InvocationTargetException, IllegalAccessException {
+    HttpResponse httpResponse = doGet(url, headers, (ClientConfig) null);
+    return PojoUtils.doDecode(clazz, httpResponse);
+  }
+
+  /**
+   * 执行http get请求
+   *
+   * @param url 请求地址
+   * @param headers 请求头
+   * @param clientConfig client配置
+   * @param clazz 返回值类型
+   * @param <T> 泛型
+   * @return 返回值
+   * @throws IOException
+   * @throws InvocationTargetException
+   * @throws IllegalAccessException
+   */
+  public static <T> T doGet(
+      @NotNull String url,
+      @Nullable Headers headers,
+      @Nullable ClientConfig clientConfig,
+      Class<T> clazz)
+      throws IOException, InvocationTargetException, IllegalAccessException {
+    HttpResponse httpResponse = doGet(url, headers, clientConfig);
+    return PojoUtils.doDecode(clazz, httpResponse);
+  }
 
   /**
    * 执行http get请求
@@ -21,7 +79,7 @@ public class Get {
    * @throws IOException
    */
   public static HttpResponse doGet(@NotNull String url) throws IOException {
-    return doGet(url, null, null);
+    return doGet(url, null, (ClientConfig) null);
   }
 
   /**
@@ -34,7 +92,7 @@ public class Get {
    */
   public static HttpResponse doGet(@NotNull String url, @Nullable Headers headers)
       throws IOException {
-    return doGet(url, headers, null);
+    return doGet(url, headers, (ClientConfig) null);
   }
 
   /**

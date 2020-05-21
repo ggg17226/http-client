@@ -37,23 +37,6 @@ public class HttpResponse {
   /** 自动转换的字符串型的返回体 */
   @Nullable private String bodyString;
 
-  public String autoDecodeBody() {
-    try {
-      if (StringUtils.isNotBlank(this.bodyString)) {
-        return this.bodyString;
-      } else {
-        if (StringUtils.isNotBlank(this.charset)) {
-          Charset charset = Charset.forName(this.charset);
-          return new String(body, charset);
-        } else {
-          return new String(body);
-        }
-      }
-    } catch (Exception e) {
-      return null;
-    }
-  }
-
   public HttpResponse(Response rsp) throws IOException {
     this.protocol = rsp.protocol();
     this.code = rsp.code();
@@ -81,6 +64,23 @@ public class HttpResponse {
           this.bodyString = this.autoDecodeBody();
         }
       }
+    }
+  }
+
+  public String autoDecodeBody() {
+    try {
+      if (StringUtils.isNotBlank(this.bodyString)) {
+        return this.bodyString;
+      } else {
+        if (StringUtils.isNotBlank(this.charset)) {
+          Charset charset = Charset.forName(this.charset);
+          return new String(body, charset);
+        } else {
+          return new String(body);
+        }
+      }
+    } catch (Exception e) {
+      return null;
     }
   }
 }

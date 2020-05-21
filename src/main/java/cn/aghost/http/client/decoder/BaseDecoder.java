@@ -3,5 +3,8 @@ package cn.aghost.http.client.decoder;
 import cn.aghost.http.client.object.HttpResponse;
 
 public interface BaseDecoder<T> {
-  T decode(HttpResponse resp);
+
+  static <T> T decode(Class<T> clazz, HttpResponse resp) {
+    return null;
+  }
 }

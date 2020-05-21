@@ -1,9 +1,6 @@
 package cn.aghost.http.client.utils;
 
-import cn.aghost.http.client.object.ClientConfig;
-import cn.aghost.http.client.object.HttpResponse;
 import cn.aghost.http.client.object.SchemesEnum;
-import com.alibaba.fastjson.JSON;
 import okhttp3.HttpUrl;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpDataUtils {
-
+  /**
+   * 构建请求url
+   *
+   * @param scheme 协议 http/https
+   * @param host 域名
+   * @param path 请求uri
+   * @param queryParam 请求url参数
+   * @return 完整url
+   */
   public static String buildUrl(
       @NotNull SchemesEnum scheme,
       @NotNull String host,
@@ -31,6 +36,12 @@ public class HttpDataUtils {
     return builder.build().toString();
   }
 
+  /**
+   * 解析url中的query string 参数
+   *
+   * @param url url
+   * @return query string 参数
+   */
   @Nullable
   public static Map<String, List<String>> decodeQueryString(String url) {
     if (StringUtils.isBlank(url)) {
@@ -58,13 +69,6 @@ public class HttpDataUtils {
     if (paramMap.size() == 0) {
       return null;
     }
-
     return paramMap;
   }
-
-//  public static <T> T parseBody(HttpResponse resp, Class<T> clazz){
-//
-//  }
-
-
 }

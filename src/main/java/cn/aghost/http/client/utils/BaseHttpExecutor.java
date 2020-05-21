@@ -75,6 +75,7 @@ public class BaseHttpExecutor {
             SerializerFeature.WriteNullListAsEmpty,
             SerializerFeature.WriteNonStringKeyAsString,
             SerializerFeature.WriteDateUseDateFormat);
+
     switch (logLevel) {
       case trace:
         log.trace(logData);

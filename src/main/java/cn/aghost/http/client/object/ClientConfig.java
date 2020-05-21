@@ -1,8 +1,8 @@
 package cn.aghost.http.client.object;
 
-import cn.aghost.http.client.annotation.TestAnnotation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.Proxy;
@@ -10,7 +10,7 @@ import java.net.Proxy;
 /** http client 配置 */
 @Data
 @AllArgsConstructor
-@TestAnnotation
+@NoArgsConstructor
 public class ClientConfig {
   /** 全局最大发起连接数 */
   private int maxRequest;

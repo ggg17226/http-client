@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
@@ -23,10 +24,14 @@ import static java.lang.Thread.sleep;
 class HttpClient1Test {
 
   @Test
-  void doGet() throws IOException, InterruptedException {
+  void doGet()
+      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException {
     BaseHttpExecutor.setLogFlag(true);
     BaseHttpExecutor.setAutoDecodeBody(true);
     HttpResponse httpResponse = Get.doGet("https://file.aghost.cn/mmmmyipaddr.php?id=1");
+    TestObject testObject =
+        Get.doGet("https://file.aghost.cn/mmmmyipaddr.php?id=1", TestObject.class);
+    log.info(JSON.toJSONString(testObject));
     assert httpResponse.getContentType().equals("application/json");
     Get.doGetAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
