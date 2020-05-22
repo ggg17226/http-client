@@ -41,6 +41,10 @@ public class CodecAnnotationUtils {
     reflectionsLogCovered = true;
   }
 
+  public static synchronized void setReflectionsLogCovered(boolean b) {
+    reflectionsLogCovered = b;
+  }
+
   /**
    * 扫描并构造默认编解码器
    *

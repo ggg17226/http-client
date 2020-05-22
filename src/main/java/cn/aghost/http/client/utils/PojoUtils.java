@@ -17,9 +17,9 @@ import java.util.Map;
 @Slf4j
 public class PojoUtils {
   /** 用于存储具体pojo类对应的编解码器的map */
-  public static Map<Class<?>, CodecAnnotationUtils.CodecPayload> codecMap;
-  public static Class<? extends BaseEncoder> DEFAULT_ENCODER = JsonEncoder.class;
-  public static Class<? extends BaseDecoder> DEFAULT_DECODER = JsonDecoder.class;
+  private static Map<Class<?>, CodecAnnotationUtils.CodecPayload> codecMap;
+  private static Class<? extends BaseEncoder> DEFAULT_ENCODER = JsonEncoder.class;
+  private static Class<? extends BaseDecoder> DEFAULT_DECODER = JsonDecoder.class;
 
   static {
     try {
@@ -30,13 +30,15 @@ public class PojoUtils {
     }
   }
 
-  public static synchronized void setDefaultEncoder(Class<? extends BaseEncoder> defaultEncoder) {
-    DEFAULT_ENCODER = defaultEncoder;
-  }
-
-  public static synchronized void setDefaultDecoder(Class<? extends BaseDecoder> defaultDecoder) {
-    DEFAULT_DECODER = defaultDecoder;
-  }
+  //  public static synchronized void setDefaultEncoder(Class<? extends BaseEncoder> defaultEncoder)
+  // {
+  //    DEFAULT_ENCODER = defaultEncoder;
+  //  }
+  //
+  //  public static synchronized void setDefaultDecoder(Class<? extends BaseDecoder> defaultDecoder)
+  // {
+  //    DEFAULT_DECODER = defaultDecoder;
+  //  }
 
   public static synchronized void addObjectMapping(
       Class<?> objectClazz, CodecAnnotationUtils.CodecPayload codec) {

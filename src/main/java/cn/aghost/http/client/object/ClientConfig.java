@@ -12,6 +12,7 @@ import java.net.Proxy;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientConfig {
+  private String tag;
   /** 全局最大发起连接数 */
   private int maxRequest;
   /** 单个host最大发起连接数 */
