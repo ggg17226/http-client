@@ -1,9 +1,11 @@
 package cn.aghost.http.client;
 
 import cn.aghost.http.client.object.ClientConfig;
+import cn.aghost.http.client.object.EncodePayload;
 import cn.aghost.http.client.object.HttpCallback;
 import cn.aghost.http.client.object.HttpResponse;
 import cn.aghost.http.client.utils.BaseHttpExecutor;
+import cn.aghost.http.client.utils.PojoUtils;
 import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -11,8 +13,72 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class Put {
+
+  /**
+   * put同步请求
+   *
+   * @param url 请求地址
+   * @param param 请求体
+   * @param clazz 返回类型
+   * @param <T> 泛型
+   * @return T的示例
+   * @throws InvocationTargetException
+   * @throws IllegalAccessException
+   * @throws IOException
+   */
+  public <T> T doPut(@NotNull String url, @NotNull Object param, Class<T> clazz)
+      throws InvocationTargetException, IllegalAccessException, IOException {
+    return doPut(url, null, param, null, clazz);
+  }
+  /**
+   * put同步请求
+   *
+   * @param url 请求地址
+   * @param headers 请求头
+   * @param param 请求体
+   * @param clazz 返回类型
+   * @param <T> 泛型
+   * @return T的示例
+   * @throws InvocationTargetException
+   * @throws IllegalAccessException
+   * @throws IOException
+   */
+  public <T> T doPut(
+      @NotNull String url, @Nullable Headers headers, @NotNull Object param, Class<T> clazz)
+      throws InvocationTargetException, IllegalAccessException, IOException {
+    return doPut(url, headers, param, null, clazz);
+  }
+
+  /**
+   * put同步请求
+   *
+   * @param url 请求地址
+   * @param headers 请求头
+   * @param param 请求体
+   * @param clientConfig 连接配置
+   * @param clazz 返回类型
+   * @param <T> 泛型
+   * @return T的示例
+   * @throws InvocationTargetException
+   * @throws IllegalAccessException
+   * @throws IOException
+   */
+  public <T> T doPut(
+      @NotNull String url,
+      @Nullable Headers headers,
+      @NotNull Object param,
+      @Nullable ClientConfig clientConfig,
+      Class<T> clazz)
+      throws InvocationTargetException, IllegalAccessException, IOException {
+    EncodePayload encodePayload = PojoUtils.doEncode(param);
+    HttpResponse httpResponse =
+        doPut(url, headers, encodePayload.getBody(), encodePayload.getContentType(), clientConfig);
+    return PojoUtils.doDecode(clazz, httpResponse);
+  }
+
   /**
    * put同步请求
    *
