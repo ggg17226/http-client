@@ -20,6 +20,7 @@ public class Delete {
    * delete同步请求
    *
    * @param url 请求地址
+   * @param tag 请求tag，将覆盖client设置中的tag参数
    * @param param 请求体
    * @param clazz 返回值类型
    * @param <T> 泛型
@@ -28,14 +29,16 @@ public class Delete {
    * @throws IllegalAccessException
    * @throws IOException
    */
-  public static <T> T doDelete(@NotNull String url, @NotNull Object param, Class<T> clazz)
+  public static <T> T doDelete(
+      @NotNull String url, @Nullable String tag, @NotNull Object param, Class<T> clazz)
       throws InvocationTargetException, IllegalAccessException, IOException {
-    return doDelete(url, null, param, null, clazz);
+    return doDelete(url, tag, null, param, null, clazz);
   }
   /**
    * delete同步请求
    *
    * @param url 请求地址
+   * @param tag 请求tag，将覆盖client设置中的tag参数
    * @param headers 请求头
    * @param param 请求体
    * @param clazz 返回值类型
@@ -46,15 +49,20 @@ public class Delete {
    * @throws IOException
    */
   public static <T> T doDelete(
-      @NotNull String url, @Nullable Headers headers, @NotNull Object param, Class<T> clazz)
+      @NotNull String url,
+      @Nullable String tag,
+      @Nullable Headers headers,
+      @NotNull Object param,
+      Class<T> clazz)
       throws InvocationTargetException, IllegalAccessException, IOException {
-    return doDelete(url, headers, param, null, clazz);
+    return doDelete(url, tag, headers, param, null, clazz);
   }
 
   /**
    * delete同步请求
    *
    * @param url 请求地址
+   * @param tag 请求tag，将覆盖client设置中的tag参数
    * @param headers 请求头
    * @param param 请求体
    * @param clientConfig 连接配置
@@ -67,11 +75,16 @@ public class Delete {
    */
   public static <T> T doDelete(
       @NotNull String url,
+      @Nullable String tag,
       @Nullable Headers headers,
       @NotNull Object param,
       @Nullable ClientConfig clientConfig,
       Class<T> clazz)
       throws InvocationTargetException, IllegalAccessException, IOException {
+    if (clientConfig == null) {
+      clientConfig = new ClientConfig();
+    }
+    clientConfig.setTag(tag);
     EncodePayload encodePayload = PojoUtils.doEncode(param);
     HttpResponse httpResponse =
         doDelete(

@@ -29,10 +29,10 @@ class HttpClient1Test {
     BaseHttpExecutor.setLogFlag(true);
     BaseHttpExecutor.setAutoDecodeBody(true);
     HttpResponse httpResponse = Get.doGet("https://file.aghost.cn/mmmmyipaddr.php?id=1");
-    TestObject testObject =
-        Get.doGet("https://file.aghost.cn/mmmmyipaddr.php?id=1", TestObject.class);
-    log.info(JSON.toJSONString(testObject));
     assert httpResponse.getContentType().equals("application/json");
+    TestObject testObject =
+        Get.doGet("https://file.aghost.cn/mmmmyipaddr.php?id=1", "tag", TestObject.class);
+    log.info(JSON.toJSONString(testObject));
     Get.doGetAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
         new HttpCallback() {
@@ -51,11 +51,19 @@ class HttpClient1Test {
   }
 
   @org.junit.jupiter.api.Test
-  void doPost() throws IOException, InterruptedException {
+  void doPost()
+      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException {
     BaseHttpExecutor.setLogFlag(true);
     HttpResponse httpResponse =
         Post.doPost("https://file.aghost.cn/mmmmyipaddr.php", "{}".getBytes(), Mimes.JSON_UTF8);
     assert httpResponse.getContentType().equals("application/json");
+    TestObject testObject =
+        Post.doPost(
+            "https://file.aghost.cn/mmmmyipaddr.php?id=1",
+            "tag",
+            new TestObject(),
+            TestObject.class);
+    log.info(JSON.toJSONString(testObject));
     Post.doPostAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
         "{}".getBytes(),
@@ -76,11 +84,19 @@ class HttpClient1Test {
   }
 
   @org.junit.jupiter.api.Test
-  void doPut() throws IOException, InterruptedException {
+  void doPut()
+      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException {
     BaseHttpExecutor.setLogFlag(true);
     HttpResponse httpResponse =
         Put.doPut("https://file.aghost.cn/mmmmyipaddr.php", "{}".getBytes(), Mimes.JSON_UTF8);
     assert httpResponse.getContentType().equals("application/json");
+    TestObject testObject =
+        Put.doPut(
+            "https://file.aghost.cn/mmmmyipaddr.php?id=1",
+            "tag",
+            new TestObject(),
+            TestObject.class);
+    log.info(JSON.toJSONString(testObject));
     Put.doPutAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
         "{}".getBytes(),
@@ -101,11 +117,21 @@ class HttpClient1Test {
   }
 
   @org.junit.jupiter.api.Test
-  void doDelete() throws IOException, InterruptedException {
+  void doDelete()
+      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException {
     BaseHttpExecutor.setLogFlag(true);
     HttpResponse httpResponse =
         Delete.doDelete("https://file.aghost.cn/mmmmyipaddr.php", "{}".getBytes(), Mimes.JSON_UTF8);
     assert httpResponse.getContentType().equals("application/json");
+
+    TestObject testObject =
+        Delete.doDelete(
+            "https://file.aghost.cn/mmmmyipaddr.php?id=1",
+            "tag",
+            new TestObject(),
+            TestObject.class);
+    log.info(JSON.toJSONString(testObject));
+
     Delete.doDeleteAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
         "{}".getBytes(),
@@ -131,7 +157,8 @@ class HttpClient1Test {
     log.info(JSON.toJSONString(inetSocketAddress));
     Proxy proxy = new Proxy(Proxy.Type.HTTP, inetSocketAddress);
     ClientConfig clientConfig =
-        new ClientConfig(1111133211, 666664321, 533245555, 444123444, 333213333, false, proxy);
+        new ClientConfig(
+            null, 1111133211, 666664321, 533245555, 444123444, 333213333, false, proxy);
     log.info(HttpClientUtil.buildClientName(clientConfig));
   }
 }

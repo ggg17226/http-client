@@ -18,6 +18,7 @@ public class Get {
    * 执行http get请求
    *
    * @param url 请求地址
+   * @param tag 请求tag，将覆盖client设置中的tag参数
    * @param clazz 返回值类型
    * @param <T> 泛型
    * @return 返回值
@@ -25,15 +26,15 @@ public class Get {
    * @throws InvocationTargetException
    * @throws IllegalAccessException
    */
-  public static <T> T doGet(@NotNull String url, Class<T> clazz)
+  public static <T> T doGet(@NotNull String url, @Nullable String tag, Class<T> clazz)
       throws IOException, InvocationTargetException, IllegalAccessException {
-    HttpResponse httpResponse = doGet(url, null, (ClientConfig) null);
-    return PojoUtils.doDecode(clazz, httpResponse);
+    return doGet(url, tag, null, null, clazz);
   }
   /**
    * 执行http get请求
    *
    * @param url 请求地址
+   * @param tag 请求tag，将覆盖client设置中的tag参数
    * @param headers 请求头
    * @param clazz 返回值类型
    * @param <T> 泛型
@@ -42,16 +43,17 @@ public class Get {
    * @throws InvocationTargetException
    * @throws IllegalAccessException
    */
-  public static <T> T doGet(@NotNull String url, @Nullable Headers headers, Class<T> clazz)
+  public static <T> T doGet(
+      @NotNull String url, @Nullable String tag, @Nullable Headers headers, Class<T> clazz)
       throws IOException, InvocationTargetException, IllegalAccessException {
-    HttpResponse httpResponse = doGet(url, headers, (ClientConfig) null);
-    return PojoUtils.doDecode(clazz, httpResponse);
+    return doGet(url, tag, headers, null, clazz);
   }
 
   /**
    * 执行http get请求
    *
    * @param url 请求地址
+   * @param tag 请求tag，将覆盖client设置中的tag参数
    * @param headers 请求头
    * @param clientConfig client配置
    * @param clazz 返回值类型
@@ -63,10 +65,15 @@ public class Get {
    */
   public static <T> T doGet(
       @NotNull String url,
+      @Nullable String tag,
       @Nullable Headers headers,
       @Nullable ClientConfig clientConfig,
       Class<T> clazz)
       throws IOException, InvocationTargetException, IllegalAccessException {
+    if (clientConfig == null) {
+      clientConfig = new ClientConfig();
+    }
+    clientConfig.setTag(tag);
     HttpResponse httpResponse = doGet(url, headers, clientConfig);
     return PojoUtils.doDecode(clazz, httpResponse);
   }

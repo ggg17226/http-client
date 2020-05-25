@@ -9,7 +9,43 @@
     <version>1.0.2</version>
 </dependency>
 ```
-使用示例
+使用示例(High Level)  
+```java
+    @Data
+    @HttpCodec
+    public class TestObject {
+      private String addr;
+    }
+
+
+    TestObject testObject =
+        Get.doGet("https://file.aghost.cn/mmmmyipaddr.php?id=1", "tag", TestObject.class);
+
+    TestObject testObject =
+        Post.doPost(
+            "https://file.aghost.cn/mmmmyipaddr.php?id=1",
+            "tag",
+            new TestObject(),
+            TestObject.class);
+
+    TestObject testObject =
+        Put.doPut(
+            "https://file.aghost.cn/mmmmyipaddr.php?id=1",
+            "tag",
+            new TestObject(),
+            TestObject.class);
+
+    TestObject testObject =
+        Delete.doDelete(
+            "https://file.aghost.cn/mmmmyipaddr.php?id=1",
+            "tag",
+            new TestObject(),
+            TestObject.class);
+
+```
+
+
+使用示例(Low Level)  
 ```java
     //get请求
     HttpResponse httpResponse = Get.doGet("https://file.aghost.cn/mmmmyipaddr.php");

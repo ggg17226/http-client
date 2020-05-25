@@ -176,6 +176,7 @@ public class HttpClientUtil {
   private static void createClient() throws DuplicateHttpClientNameException {
     ClientConfig clientConfig =
         new ClientConfig(
+            null,
             DEFAULT_MAX_REQUEST,
             DEFAULT_MAX_REQUEST_PER_HOST,
             DEFAULT_TIMEOUT,
