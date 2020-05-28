@@ -6,7 +6,7 @@
 <dependency>
     <groupId>cn.aghost</groupId>
     <artifactId>http-client</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 使用示例(High Level)  
