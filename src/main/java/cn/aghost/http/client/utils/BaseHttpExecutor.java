@@ -1,5 +1,6 @@
 package cn.aghost.http.client.utils;
 
+import cn.aghost.http.client.exceptions.ClientNotFoundException;
 import cn.aghost.http.client.object.ClientConfig;
 import cn.aghost.http.client.object.HttpCallback;
 import cn.aghost.http.client.object.HttpResponse;
@@ -115,7 +116,7 @@ public class BaseHttpExecutor {
    */
   public static HttpResponse executeGet(
       @NotNull String url, @Nullable Headers headers, @Nullable ClientConfig clientConfig)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     String reqId = null;
     boolean logFlag = BaseHttpExecutor.logFlag;
     if (logFlag) {
@@ -131,6 +132,9 @@ public class BaseHttpExecutor {
       execLog(jsonObject);
     }
     OkHttpClient client = HttpClientUtil.getClient(clientConfig);
+    if (client == null) {
+      throw new ClientNotFoundException();
+    }
     Request.Builder builder = buildBaseReq().url(url).get();
     if (headers != null && headers.size() > 0) {
       builder.headers(headers);
@@ -177,7 +181,7 @@ public class BaseHttpExecutor {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     if (contentType == null) {
       contentType = MediaType.parse("text/plan; charset=utf-8");
     }
@@ -203,6 +207,9 @@ public class BaseHttpExecutor {
     }
 
     OkHttpClient client = HttpClientUtil.getClient(clientConfig);
+    if (client == null) {
+      throw new ClientNotFoundException();
+    }
     Request.Builder builder =
         buildBaseReq().url(url).method(method, RequestBody.create(contentType, body));
     if (headers != null && headers.size() > 0) {
@@ -242,7 +249,8 @@ public class BaseHttpExecutor {
       @NotNull String url,
       @Nullable Headers headers,
       @Nullable ClientConfig clientConfig,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
 
     String reqId = null;
     boolean logFlag = BaseHttpExecutor.logFlag;
@@ -260,6 +268,9 @@ public class BaseHttpExecutor {
     }
 
     OkHttpClient client = HttpClientUtil.getClient(clientConfig);
+    if (client == null) {
+      throw new ClientNotFoundException();
+    }
     Request.Builder builder = buildBaseReq().url(url).get();
     if (headers != null && headers.size() > 0) {
       builder.headers(headers);
@@ -285,7 +296,8 @@ public class BaseHttpExecutor {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     if (contentType == null) {
       contentType = MediaType.parse("text/plan; charset=utf-8");
     }
@@ -311,6 +323,9 @@ public class BaseHttpExecutor {
     }
 
     OkHttpClient client = HttpClientUtil.getClient(clientConfig);
+    if (client == null) {
+      throw new ClientNotFoundException();
+    }
     Request.Builder builder =
         buildBaseReq().url(url).method(method, RequestBody.create(contentType, body));
     if (headers != null && headers.size() > 0) {
@@ -331,7 +346,8 @@ public class BaseHttpExecutor {
       @NotNull String url,
       @Nullable Headers headers,
       @Nullable ClientConfig clientConfig,
-      @NotNull Callback callback) {
+      @NotNull Callback callback)
+      throws ClientNotFoundException {
     String reqId = null;
     boolean logFlag = BaseHttpExecutor.logFlag;
     if (logFlag) {
@@ -347,6 +363,9 @@ public class BaseHttpExecutor {
       execLog(jsonObject);
     }
     OkHttpClient client = HttpClientUtil.getClient(clientConfig);
+    if (client == null) {
+      throw new ClientNotFoundException();
+    }
     Request.Builder builder = buildBaseReq().url(url).get();
     if (headers != null && headers.size() > 0) {
       builder.headers(headers);
@@ -372,7 +391,8 @@ public class BaseHttpExecutor {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig,
-      @NotNull Callback callback) {
+      @NotNull Callback callback)
+      throws ClientNotFoundException {
     if (contentType == null) {
       contentType = MediaType.parse("text/plan; charset=utf-8");
     }
@@ -380,6 +400,9 @@ public class BaseHttpExecutor {
       body = "".getBytes();
     }
     OkHttpClient client = HttpClientUtil.getClient(clientConfig);
+    if (client == null) {
+      throw new ClientNotFoundException();
+    }
     Request.Builder builder =
         buildBaseReq().url(url).method(method, RequestBody.create(contentType, body));
     if (headers != null && headers.size() > 0) {

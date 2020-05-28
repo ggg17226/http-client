@@ -1,5 +1,6 @@
 package cn.aghost.http.client;
 
+import cn.aghost.http.client.exceptions.ClientNotFoundException;
 import cn.aghost.http.client.object.ClientConfig;
 import cn.aghost.http.client.object.EncodePayload;
 import cn.aghost.http.client.object.HttpCallback;
@@ -31,7 +32,8 @@ public class Delete {
    */
   public static <T> T doDelete(
       @NotNull String url, @Nullable String tag, @NotNull Object param, Class<T> clazz)
-      throws InvocationTargetException, IllegalAccessException, IOException {
+      throws InvocationTargetException, IllegalAccessException, IOException,
+          ClientNotFoundException {
     return doDelete(url, tag, null, param, null, clazz);
   }
   /**
@@ -54,7 +56,8 @@ public class Delete {
       @Nullable Headers headers,
       @NotNull Object param,
       Class<T> clazz)
-      throws InvocationTargetException, IllegalAccessException, IOException {
+      throws InvocationTargetException, IllegalAccessException, IOException,
+          ClientNotFoundException {
     return doDelete(url, tag, headers, param, null, clazz);
   }
 
@@ -80,7 +83,8 @@ public class Delete {
       @NotNull Object param,
       @Nullable ClientConfig clientConfig,
       Class<T> clazz)
-      throws InvocationTargetException, IllegalAccessException, IOException {
+      throws InvocationTargetException, IllegalAccessException, IOException,
+          ClientNotFoundException {
     if (clientConfig == null) {
       clientConfig = new ClientConfig();
     }
@@ -103,7 +107,7 @@ public class Delete {
    */
   public static HttpResponse doDelete(
       @NotNull String url, @Nullable byte[] body, @Nullable MediaType contentType)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return doDelete(url, null, body, contentType, null);
   }
   /**
@@ -121,7 +125,7 @@ public class Delete {
       @Nullable Headers headers,
       @Nullable byte[] body,
       @Nullable MediaType contentType)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return doDelete(url, headers, body, contentType, null);
   }
   /**
@@ -141,7 +145,7 @@ public class Delete {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return BaseHttpExecutor.executeWithBody(
         "DELETE", url, headers, body, contentType, clientConfig);
   }
@@ -157,7 +161,8 @@ public class Delete {
       @NotNull String url,
       @Nullable byte[] body,
       @Nullable MediaType contentType,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     doDeleteAsync(url, null, body, contentType, null, httpCallback);
   }
   /**
@@ -174,7 +179,8 @@ public class Delete {
       @Nullable Headers headers,
       @Nullable byte[] body,
       @Nullable MediaType contentType,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     doDeleteAsync(url, headers, body, contentType, null, httpCallback);
   }
   /**
@@ -193,7 +199,8 @@ public class Delete {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     BaseHttpExecutor.executeWithBodyAsync(
         "DELETE", url, headers, body, contentType, clientConfig, httpCallback);
   }
@@ -213,7 +220,8 @@ public class Delete {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig,
-      @NotNull Callback callback) {
+      @NotNull Callback callback)
+      throws ClientNotFoundException {
     BaseHttpExecutor.executeWithBodyAsync(
         "DELETE", url, headers, body, contentType, clientConfig, callback);
   }

@@ -1,5 +1,6 @@
 package cn.aghost.http.client;
 
+import cn.aghost.http.client.exceptions.ClientNotFoundException;
 import cn.aghost.http.client.object.ClientConfig;
 import cn.aghost.http.client.object.EncodePayload;
 import cn.aghost.http.client.object.HttpCallback;
@@ -32,7 +33,8 @@ public class Put {
    */
   public static <T> T doPut(
       @NotNull String url, @Nullable String tag, @NotNull Object param, Class<T> clazz)
-      throws InvocationTargetException, IllegalAccessException, IOException {
+      throws InvocationTargetException, IllegalAccessException, IOException,
+          ClientNotFoundException {
     return doPut(url, tag, null, param, null, clazz);
   }
   /**
@@ -55,7 +57,8 @@ public class Put {
       @Nullable Headers headers,
       @NotNull Object param,
       Class<T> clazz)
-      throws InvocationTargetException, IllegalAccessException, IOException {
+      throws InvocationTargetException, IllegalAccessException, IOException,
+          ClientNotFoundException {
     return doPut(url, tag, headers, param, null, clazz);
   }
 
@@ -81,7 +84,8 @@ public class Put {
       @NotNull Object param,
       @Nullable ClientConfig clientConfig,
       Class<T> clazz)
-      throws InvocationTargetException, IllegalAccessException, IOException {
+      throws InvocationTargetException, IllegalAccessException, IOException,
+          ClientNotFoundException {
     if (clientConfig == null) {
       clientConfig = new ClientConfig();
     }
@@ -103,7 +107,7 @@ public class Put {
    */
   public static HttpResponse doPut(
       @NotNull String url, @Nullable byte[] body, @Nullable MediaType contentType)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return doPut(url, null, body, contentType, null);
   }
   /**
@@ -121,7 +125,7 @@ public class Put {
       @Nullable Headers headers,
       @Nullable byte[] body,
       @Nullable MediaType contentType)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return doPut(url, headers, body, contentType, null);
   }
   /**
@@ -141,7 +145,7 @@ public class Put {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return BaseHttpExecutor.executeWithBody("PUT", url, headers, body, contentType, clientConfig);
   }
   /**
@@ -156,7 +160,8 @@ public class Put {
       @NotNull String url,
       @Nullable byte[] body,
       @Nullable MediaType contentType,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     doPutAsync(url, null, body, contentType, null, httpCallback);
   }
   /**
@@ -173,7 +178,8 @@ public class Put {
       @Nullable Headers headers,
       @Nullable byte[] body,
       @Nullable MediaType contentType,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     doPutAsync(url, headers, body, contentType, null, httpCallback);
   }
   /**
@@ -192,7 +198,8 @@ public class Put {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     BaseHttpExecutor.executeWithBodyAsync(
         "PUT", url, headers, body, contentType, clientConfig, httpCallback);
   }
@@ -212,7 +219,8 @@ public class Put {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig,
-      @NotNull Callback callback) {
+      @NotNull Callback callback)
+      throws ClientNotFoundException {
     BaseHttpExecutor.executeWithBodyAsync(
         "PUT", url, headers, body, contentType, clientConfig, callback);
   }

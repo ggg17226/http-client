@@ -12,7 +12,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.net.Proxy;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,6 +39,8 @@ public class HttpClientUtil {
   public static final int DEFAULT_TIMEOUT = 30;
   /** 是否强制http1，为false时当http2可用就用http2 */
   public static final boolean DEFAULT_FORCE_HTTP1 = false;
+  /** 是否跳过ssl检查 */
+  public static final boolean DEFAULT_SKIP_SSL_CHECK = false;
   /** 默认代理配置 */
   public static final Proxy DEFAULT_PROXY = null;
   /** http client map */
@@ -68,6 +76,8 @@ public class HttpClientUtil {
     sb.append("-");
     sb.append(clientConfig.isForceHttp1());
     sb.append("-");
+    sb.append(clientConfig.isSkipSslCheck());
+    sb.append("-");
     sb.append(JSON.toJSONString(clientConfig.getProxy()));
 
     return DigestUtils.md5Hex(sb.toString());
@@ -96,7 +106,7 @@ public class HttpClientUtil {
       try (LockWrapper l = new LockWrapper(defaultClientLock)) {
         l.lock();
         createClient();
-      } catch (DuplicateHttpClientNameException e) {
+      } catch (Exception e) {
       }
     }
     return clientMap.get(DEFAULT_CLIENT_NAME);
@@ -129,7 +139,8 @@ public class HttpClientUtil {
     if (!clientMap.containsKey(clientName)) {
       try {
         createClient(clientName, clientConfig);
-      } catch (DuplicateHttpClientNameException e) {
+      } catch (Exception e) {
+        return null;
       }
     }
     return clientMap.get(clientName);
@@ -143,7 +154,7 @@ public class HttpClientUtil {
    * @throws DuplicateHttpClientNameException 已有相同名字的client存在
    */
   public static synchronized void createClient(String clientName, ClientConfig clientConfig)
-      throws DuplicateHttpClientNameException {
+      throws DuplicateHttpClientNameException, KeyManagementException, NoSuchAlgorithmException {
     log.debug("create client({}),{}", clientName, clientConfig.toString());
     if (clientMap.containsKey(clientName)) {
       throw new DuplicateHttpClientNameException();
@@ -162,10 +173,39 @@ public class HttpClientUtil {
             clientConfig.isForceHttp1()
                 ? Arrays.asList(Protocol.HTTP_1_1)
                 : Arrays.asList(Protocol.HTTP_1_1, Protocol.HTTP_2));
+    if (clientConfig.isSkipSslCheck()) {
+      setDoesNotCheckSsl(builder);
+    }
     if (clientConfig.getProxy() != null) {
       builder.proxy(clientConfig.getProxy());
     }
     clientMap.put(clientName, builder.build());
+  }
+
+  private static void setDoesNotCheckSsl(OkHttpClient.Builder builder)
+      throws NoSuchAlgorithmException, KeyManagementException {
+    final TrustManager[] trustAllCerts =
+        new TrustManager[] {
+          new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(
+                java.security.cert.X509Certificate[] chain, String authType) {}
+
+            @Override
+            public void checkServerTrusted(
+                java.security.cert.X509Certificate[] chain, String authType) {}
+
+            @Override
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+              return new java.security.cert.X509Certificate[] {};
+            }
+          }
+        };
+    final SSLContext sslContext = SSLContext.getInstance("SSL");
+    sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+    final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+    builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
+    builder.hostnameVerifier((s, sslSession) -> true);
   }
 
   /**
@@ -173,7 +213,8 @@ public class HttpClientUtil {
    *
    * @throws DuplicateHttpClientNameException 已有相同名字的client存在
    */
-  private static void createClient() throws DuplicateHttpClientNameException {
+  private static void createClient()
+      throws DuplicateHttpClientNameException, NoSuchAlgorithmException, KeyManagementException {
     ClientConfig clientConfig =
         new ClientConfig(
             null,
@@ -183,6 +224,7 @@ public class HttpClientUtil {
             DEFAULT_TIMEOUT,
             DEFAULT_TIMEOUT,
             DEFAULT_FORCE_HTTP1,
+            DEFAULT_SKIP_SSL_CHECK,
             DEFAULT_PROXY);
     createClient(DEFAULT_CLIENT_NAME, clientConfig);
   }

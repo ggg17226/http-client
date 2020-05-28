@@ -1,5 +1,6 @@
 package cn.aghost.http.client;
 
+import cn.aghost.http.client.exceptions.ClientNotFoundException;
 import cn.aghost.http.client.object.ClientConfig;
 import cn.aghost.http.client.object.HttpCallback;
 import cn.aghost.http.client.object.HttpResponse;
@@ -25,13 +26,21 @@ class HttpClient1Test {
 
   @Test
   void doGet()
-      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException {
+      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException,
+          ClientNotFoundException {
     BaseHttpExecutor.setLogFlag(true);
     BaseHttpExecutor.setAutoDecodeBody(true);
     HttpResponse httpResponse = Get.doGet("https://file.aghost.cn/mmmmyipaddr.php?id=1");
     assert httpResponse.getContentType().equals("application/json");
+    ClientConfig clientConfig = new ClientConfig();
+    clientConfig.setSkipSslCheck(true);
     TestObject testObject =
-        Get.doGet("https://file.aghost.cn/mmmmyipaddr.php?id=1", "tag", TestObject.class);
+        Get.doGet(
+            "https://file.aghost.cn/mmmmyipaddr.php?id=1",
+            "tag",
+            null,
+            clientConfig,
+            TestObject.class);
     log.info(JSON.toJSONString(testObject));
     Get.doGetAsync(
         "https://file.aghost.cn/mmmmyipaddr.php",
@@ -52,7 +61,8 @@ class HttpClient1Test {
 
   @org.junit.jupiter.api.Test
   void doPost()
-      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException {
+      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException,
+          ClientNotFoundException {
     BaseHttpExecutor.setLogFlag(true);
     HttpResponse httpResponse =
         Post.doPost("https://file.aghost.cn/mmmmyipaddr.php", "{}".getBytes(), Mimes.JSON_UTF8);
@@ -85,7 +95,8 @@ class HttpClient1Test {
 
   @org.junit.jupiter.api.Test
   void doPut()
-      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException {
+      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException,
+          ClientNotFoundException {
     BaseHttpExecutor.setLogFlag(true);
     HttpResponse httpResponse =
         Put.doPut("https://file.aghost.cn/mmmmyipaddr.php", "{}".getBytes(), Mimes.JSON_UTF8);
@@ -118,7 +129,8 @@ class HttpClient1Test {
 
   @org.junit.jupiter.api.Test
   void doDelete()
-      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException {
+      throws IOException, InterruptedException, InvocationTargetException, IllegalAccessException,
+          ClientNotFoundException {
     BaseHttpExecutor.setLogFlag(true);
     HttpResponse httpResponse =
         Delete.doDelete("https://file.aghost.cn/mmmmyipaddr.php", "{}".getBytes(), Mimes.JSON_UTF8);
@@ -158,7 +170,7 @@ class HttpClient1Test {
     Proxy proxy = new Proxy(Proxy.Type.HTTP, inetSocketAddress);
     ClientConfig clientConfig =
         new ClientConfig(
-            null, 1111133211, 666664321, 533245555, 444123444, 333213333, false, proxy);
+            null, 1111133211, 666664321, 533245555, 444123444, 333213333, false, true, proxy);
     log.info(HttpClientUtil.buildClientName(clientConfig));
   }
 }

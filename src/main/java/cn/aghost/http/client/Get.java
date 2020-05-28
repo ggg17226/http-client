@@ -1,5 +1,6 @@
 package cn.aghost.http.client;
 
+import cn.aghost.http.client.exceptions.ClientNotFoundException;
 import cn.aghost.http.client.object.ClientConfig;
 import cn.aghost.http.client.object.HttpCallback;
 import cn.aghost.http.client.object.HttpResponse;
@@ -27,7 +28,8 @@ public class Get {
    * @throws IllegalAccessException
    */
   public static <T> T doGet(@NotNull String url, @Nullable String tag, Class<T> clazz)
-      throws IOException, InvocationTargetException, IllegalAccessException {
+      throws IOException, InvocationTargetException, IllegalAccessException,
+          ClientNotFoundException {
     return doGet(url, tag, null, null, clazz);
   }
   /**
@@ -45,7 +47,8 @@ public class Get {
    */
   public static <T> T doGet(
       @NotNull String url, @Nullable String tag, @Nullable Headers headers, Class<T> clazz)
-      throws IOException, InvocationTargetException, IllegalAccessException {
+      throws IOException, InvocationTargetException, IllegalAccessException,
+          ClientNotFoundException {
     return doGet(url, tag, headers, null, clazz);
   }
 
@@ -69,7 +72,8 @@ public class Get {
       @Nullable Headers headers,
       @Nullable ClientConfig clientConfig,
       Class<T> clazz)
-      throws IOException, InvocationTargetException, IllegalAccessException {
+      throws IOException, InvocationTargetException, IllegalAccessException,
+          ClientNotFoundException {
     if (clientConfig == null) {
       clientConfig = new ClientConfig();
     }
@@ -85,7 +89,8 @@ public class Get {
    * @return 返回值
    * @throws IOException
    */
-  public static HttpResponse doGet(@NotNull String url) throws IOException {
+  public static HttpResponse doGet(@NotNull String url)
+      throws IOException, ClientNotFoundException {
     return doGet(url, null, (ClientConfig) null);
   }
 
@@ -98,7 +103,7 @@ public class Get {
    * @throws IOException
    */
   public static HttpResponse doGet(@NotNull String url, @Nullable Headers headers)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return doGet(url, headers, (ClientConfig) null);
   }
 
@@ -113,7 +118,7 @@ public class Get {
    */
   public static HttpResponse doGet(
       @NotNull String url, @Nullable Headers headers, @Nullable ClientConfig clientConfig)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return BaseHttpExecutor.executeGet(url, headers, clientConfig);
   }
 
@@ -123,7 +128,8 @@ public class Get {
    * @param url 请求地址
    * @param httpCallback callback类
    */
-  public static void doGetAsync(@NotNull String url, @NotNull HttpCallback httpCallback) {
+  public static void doGetAsync(@NotNull String url, @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     doGetAsync(url, null, null, httpCallback);
   }
   /**
@@ -134,7 +140,8 @@ public class Get {
    * @param httpCallback callback类
    */
   public static void doGetAsync(
-      @NotNull String url, @Nullable Headers headers, @NotNull HttpCallback httpCallback) {
+      @NotNull String url, @Nullable Headers headers, @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     doGetAsync(url, headers, null, httpCallback);
   }
   /**
@@ -149,7 +156,8 @@ public class Get {
       @NotNull String url,
       @Nullable Headers headers,
       @Nullable ClientConfig clientConfig,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     BaseHttpExecutor.executeGetAsync(url, headers, clientConfig, httpCallback);
   }
 
@@ -165,7 +173,8 @@ public class Get {
       @NotNull String url,
       @Nullable Headers headers,
       @Nullable ClientConfig clientConfig,
-      @NotNull Callback callback) {
+      @NotNull Callback callback)
+      throws ClientNotFoundException {
     BaseHttpExecutor.executeGetAsync(url, headers, clientConfig, callback);
   }
 }

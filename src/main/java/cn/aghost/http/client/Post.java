@@ -1,5 +1,6 @@
 package cn.aghost.http.client;
 
+import cn.aghost.http.client.exceptions.ClientNotFoundException;
 import cn.aghost.http.client.object.ClientConfig;
 import cn.aghost.http.client.object.EncodePayload;
 import cn.aghost.http.client.object.HttpCallback;
@@ -31,7 +32,8 @@ public class Post {
    */
   public static <T> T doPost(
       @NotNull String url, @Nullable String tag, @NotNull Object param, Class<T> clazz)
-      throws InvocationTargetException, IllegalAccessException, IOException {
+      throws InvocationTargetException, IllegalAccessException, IOException,
+          ClientNotFoundException {
     return doPost(url, tag, null, param, null, clazz);
   }
   /**
@@ -54,7 +56,8 @@ public class Post {
       @Nullable Headers headers,
       @NotNull Object param,
       Class<T> clazz)
-      throws InvocationTargetException, IllegalAccessException, IOException {
+      throws InvocationTargetException, IllegalAccessException, IOException,
+          ClientNotFoundException {
     return doPost(url, tag, headers, param, null, clazz);
   }
 
@@ -80,7 +83,8 @@ public class Post {
       @NotNull Object param,
       @Nullable ClientConfig clientConfig,
       Class<T> clazz)
-      throws InvocationTargetException, IllegalAccessException, IOException {
+      throws InvocationTargetException, IllegalAccessException, IOException,
+          ClientNotFoundException {
     if (clientConfig == null) {
       clientConfig = new ClientConfig();
     }
@@ -102,7 +106,7 @@ public class Post {
    */
   public static HttpResponse doPost(
       @NotNull String url, @Nullable byte[] body, @Nullable MediaType contentType)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return doPost(url, null, body, contentType, null);
   }
   /**
@@ -120,7 +124,7 @@ public class Post {
       @Nullable Headers headers,
       @Nullable byte[] body,
       @Nullable MediaType contentType)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return doPost(url, headers, body, contentType, null);
   }
 
@@ -141,7 +145,7 @@ public class Post {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig)
-      throws IOException {
+      throws IOException, ClientNotFoundException {
     return BaseHttpExecutor.executeWithBody("POST", url, headers, body, contentType, clientConfig);
   }
   /**
@@ -156,7 +160,8 @@ public class Post {
       @NotNull String url,
       @Nullable byte[] body,
       @Nullable MediaType contentType,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     doPostAsync(url, null, body, contentType, null, httpCallback);
   }
   /**
@@ -173,7 +178,8 @@ public class Post {
       @Nullable Headers headers,
       @Nullable byte[] body,
       @Nullable MediaType contentType,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     doPostAsync(url, headers, body, contentType, null, httpCallback);
   }
 
@@ -193,7 +199,8 @@ public class Post {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig,
-      @NotNull HttpCallback httpCallback) {
+      @NotNull HttpCallback httpCallback)
+      throws ClientNotFoundException {
     BaseHttpExecutor.executeWithBodyAsync(
         "POST", url, headers, body, contentType, clientConfig, httpCallback);
   }
@@ -213,7 +220,8 @@ public class Post {
       @Nullable byte[] body,
       @Nullable MediaType contentType,
       @Nullable ClientConfig clientConfig,
-      @NotNull Callback callback) {
+      @NotNull Callback callback)
+      throws ClientNotFoundException {
     BaseHttpExecutor.executeWithBodyAsync(
         "POST", url, headers, body, contentType, clientConfig, callback);
   }

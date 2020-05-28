@@ -6,7 +6,7 @@
 
     <groupId>cn.aghost</groupId>
     <artifactId>http-client</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <name>http-client</name>
     <description>基于okhttp3封装的http工具包</description>
     <packaging>jar</packaging>

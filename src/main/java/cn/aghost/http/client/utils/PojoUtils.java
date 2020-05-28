@@ -18,6 +18,7 @@ import java.util.Map;
 public class PojoUtils {
   /** 用于存储具体pojo类对应的编解码器的map */
   private static Map<Class<?>, CodecAnnotationUtils.CodecPayload> codecMap;
+
   private static Class<? extends BaseEncoder> DEFAULT_ENCODER = JsonEncoder.class;
   private static Class<? extends BaseDecoder> DEFAULT_DECODER = JsonDecoder.class;
 

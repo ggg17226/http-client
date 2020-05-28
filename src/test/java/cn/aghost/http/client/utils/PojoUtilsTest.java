@@ -2,6 +2,7 @@ package cn.aghost.http.client.utils;
 
 import cn.aghost.http.client.Get;
 import cn.aghost.http.client.TestObject;
+import cn.aghost.http.client.exceptions.ClientNotFoundException;
 import cn.aghost.http.client.object.EncodePayload;
 import cn.aghost.http.client.object.HttpResponse;
 import com.alibaba.fastjson.JSON;
@@ -29,7 +30,9 @@ class PojoUtilsTest {
   }
 
   @Test
-  void doDecode() throws IOException, IllegalAccessException, InvocationTargetException {
+  void doDecode()
+      throws IOException, IllegalAccessException, InvocationTargetException,
+          ClientNotFoundException {
     HttpResponse httpResponse = Get.doGet("https://file.aghost.cn/mmmmyipaddr.php");
     TestObject testObject = PojoUtils.doDecode(TestObject.class, httpResponse);
     log.info(JSON.toJSONString(testObject));
