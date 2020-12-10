@@ -19,7 +19,10 @@ import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /** codec 工具类 */
@@ -60,10 +63,10 @@ public class CodecAnnotationUtils {
     Class<ClassLoader> classLoaderClass = ClassLoader.class;
     Field packages = classLoaderClass.getDeclaredField("packages");
     packages.setAccessible(true);
-    HashMap<String, Package> packageContext =
-        (HashMap<String, Package>) packages.get(contextClassLoader);
-    HashMap<String, Package> packageStatic =
-        (HashMap<String, Package>) packages.get(staticClassLoader);
+    ConcurrentHashMap<String, Package> packageContext =
+        (ConcurrentHashMap<String, Package>) packages.get(contextClassLoader);
+    ConcurrentHashMap<String, Package> packageStatic =
+        (ConcurrentHashMap<String, Package>) packages.get(staticClassLoader);
     List<String> urlStrList = new ArrayList<>();
     for (String s : packageContext.keySet()) {
       if (s.startsWith("org.junit") || s.startsWith("junit") || s.startsWith("retrofit2")) {

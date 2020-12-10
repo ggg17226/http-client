@@ -55,14 +55,33 @@ public class HttpResponse {
                 this.contentType = value.trim().toLowerCase();
               }
             });
-    if (StringUtils.isNotBlank(this.contentType) && StringUtils.contains(this.contentType, "; ")) {
-      String[] arr = this.contentType.split("; ");
-      if (arr.length == 2) {
-        this.contentType = arr[0].trim();
-        this.charset = arr[1].replaceAll("charset=", "").trim();
-        if (BaseHttpExecutor.isAutoDecodeBody()) {
-          this.bodyString = this.autoDecodeBody();
+
+    if (StringUtils.isNotBlank(this.contentType)) {
+      boolean isUtf8Json = false;
+      if (StringUtils.equalsAnyIgnoreCase("application/json", this.contentType)) {
+        isUtf8Json = true;
+      }
+      if (!isUtf8Json && StringUtils.contains(this.contentType, ";")) {
+        String[] arr = this.contentType.split(";");
+
+        if (arr.length == 2) {
+          final String tmpContentType = arr[0].trim();
+          String tmpCharset = arr[1].trim();
+          if (tmpCharset.toLowerCase().contains("charset=")) {
+            tmpCharset = tmpCharset.replaceAll("charset=", "").trim();
+          }
+          if (StringUtils.equalsAnyIgnoreCase("application/json", tmpContentType)
+              && StringUtils.equalsAnyIgnoreCase("UTF-8", tmpCharset)) {
+            isUtf8Json = true;
+          }
         }
+      }
+      if (isUtf8Json) {
+        this.contentType = "application/json";
+        this.charset = "UTF-8";
+      }
+      if (BaseHttpExecutor.isAutoDecodeBody()) {
+        this.bodyString = this.autoDecodeBody();
       }
     }
   }
